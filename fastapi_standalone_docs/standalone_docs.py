@@ -24,7 +24,7 @@ class StandaloneDocs:
         self.patch_redoc(redoc_favicon_url)
 
     def patch_swagger(self, swagger_favicon_url: Optional[str]):
-        if self.app.docs_url:
+        if self.app.openapi_url and self.app.docs_url:
             if not swagger_favicon_url:
                 swagger_favicon_url = self.app.docs_url + "/fastapi/favicon.png"
                 self.app.mount(
@@ -49,7 +49,7 @@ class StandaloneDocs:
             applications.get_swagger_ui_html = patched_get_swagger_ui_html
 
     def patch_redoc(self, redoc_favicon_url: Optional[str]):
-        if self.app.redoc_url:
+        if self.app.openapi_url and self.app.redoc_url:
             if not redoc_favicon_url:
                 redoc_favicon_url = self.app.redoc_url + "/fastapi/favicon.png"
                 self.app.mount(

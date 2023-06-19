@@ -82,16 +82,14 @@ def test_swagger_disabled():
     StandaloneDocs(app)
     client = TestClient(app)
 
-    response = client.get("/docs")
-    assert response.status_code == 404
-
-    resources = (
+    paths = (
+        "/docs",
         "/docs/swagger-ui.css",
         "/docs/fastapi/favicon.png",
         "/docs/swagger-ui-bundle.js",
     )
-    for res in resources:
-        response = client.get(res)
+    for path in paths:
+        response = client.get(path)
         assert response.status_code == 404
 
 
@@ -171,16 +169,14 @@ def test_redoc_disabled():
     StandaloneDocs(app)
     client = TestClient(app)
 
-    response = client.get("/redoc")
-    assert response.status_code == 404
-
-    resources = (
-        "/my-redoc-url/logo-mini.svg",
-        "/my-redoc-url/redoc.standalone.js",
-        "/my-redoc-url/fastapi/favicon.png",
+    paths = (
+        "/redoc",
+        "/redoc/logo-mini.svg",
+        "/redoc/redoc.standalone.js",
+        "/redoc/fastapi/favicon.png",
     )
-    for res in resources:
-        response = client.get(res)
+    for path in paths:
+        response = client.get(path)
         assert response.status_code == 404
 
 
@@ -192,3 +188,23 @@ def test_redoc_with_google_fonts():
     response = client.get("/redoc")
     assert response.status_code == 200
     assert "https://fonts.googleapis.com" in response.text
+
+
+def test_openapi_disabled():
+    app = FastAPI(openapi_url=None)
+    StandaloneDocs(app)
+    client = TestClient(app)
+
+    paths = (
+        "/docs",
+        "/docs/swagger-ui.css",
+        "/docs/fastapi/favicon.png",
+        "/docs/swagger-ui-bundle.js",
+        "/redoc",
+        "/redoc/logo-mini.svg",
+        "/redoc/redoc.standalone.js",
+        "/redoc/fastapi/favicon.png",
+    )
+    for path in paths:
+        response = client.get(path)
+        assert response.status_code == 404
