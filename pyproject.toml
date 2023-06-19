@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fastapi-standalone-docs"
-version = "0.0.1"
+version = "0.1.0"
 description = "Host FastAPI Swagger UI and ReDoc without third party CDNs"
 authors = ["IOXIO Ltd"]
 license = "MIT"
