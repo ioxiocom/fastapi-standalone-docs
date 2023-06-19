@@ -16,8 +16,8 @@ SWAGGER_FILES = [
 ]
 
 REDOC_FILES = [
-    "https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js.LICENSE.txt",
-    "https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js",
+    "https://cdn.jsdelivr.net/npm/redoc@2.0.0/bundles/redoc.standalone.js.LICENSE.txt",
+    "https://cdn.jsdelivr.net/npm/redoc@2.0.0/bundles/redoc.standalone.js",
     "https://cdn.redoc.ly/redoc/logo-mini.svg",
 ]
 
