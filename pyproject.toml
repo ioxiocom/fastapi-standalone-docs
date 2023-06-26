@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fastapi-standalone-docs"
-version = "0.1.1"
+version = "0.1.2"
 description = "Host FastAPI Swagger UI and ReDoc without third party CDNs"
 authors = ["IOXIO Ltd"]
 license = "MIT"
@@ -10,7 +10,7 @@ packages = [{include = "fastapi_standalone_docs"}]
 
 [tool.poetry.dependencies]
 python = ">=3.8.1,<4.0"
-fastapi = ">=0.95.2,<0.98.0"
+fastapi = ">=0.95.2,<0.99.0"
 
 [tool.poetry.scripts]
 update-fastapi-standalone-docs = { callable = "fastapi_standalone_docs.scripts:update_docs", extras = ["scripts"] }
