@@ -4,7 +4,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![PyPI](https://img.shields.io/pypi/v/fastapi-standalone-docs)](https://pypi.org/project/fastapi-standalone-docs/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/fastapi-standalone-docs)](https://pypi.org/project/fastapi-standalone-docs/)
-[![License: BSD 3-Clause](https://img.shields.io/pypi/l/fastapi-standalone-docs)](https://opensource.org/license/mit/)
+[![License: BSD 3-Clause](https://img.shields.io/pypi/l/fastapi-standalone-docs)](https://opensource.org/license/bsd-3-clause/)
 
 Host FastAPI Swagger UI and ReDoc without any third party CDNs. Handy if you want to be
 able to use the docs offline or want to avoid loading content from 3rd party CDNs due to
