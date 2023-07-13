@@ -10,7 +10,7 @@ packages = [{include = "fastapi_standalone_docs"}]
 
 [tool.poetry.dependencies]
 python = ">=3.8.1,<4.0"
-fastapi = ">=0.95.2,<0.99.0"
+fastapi = ">=0.95.2,<1"
 
 [tool.poetry.scripts]
 update-fastapi-standalone-docs = { callable = "fastapi_standalone_docs.scripts:update_docs", extras = ["scripts"] }
