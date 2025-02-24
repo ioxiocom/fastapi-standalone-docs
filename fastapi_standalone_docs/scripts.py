@@ -5,19 +5,19 @@ from urllib.request import urlretrieve
 import fastapi_standalone_docs
 
 FASTAPI_FILES = [
-    "https://fastapi.tiangolo.com/img/favicon.png",
+    "https://raw.githubusercontent.com/tiangolo/fastapi/master/docs/en/docs/img/favicon.png",
     "https://raw.githubusercontent.com/tiangolo/fastapi/master/LICENSE",
 ]
 
 SWAGGER_FILES = [
-    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@4/LICENSE",
-    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@4/swagger-ui.css",
-    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@4/swagger-ui-bundle.js",
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.19.0/LICENSE",
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.19.0/swagger-ui.css",
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.19.0/swagger-ui-bundle.js",
 ]
 
 REDOC_FILES = [
-    "https://cdn.jsdelivr.net/npm/redoc@2.0.0/bundles/redoc.standalone.js.LICENSE.txt",
-    "https://cdn.jsdelivr.net/npm/redoc@2.0.0/bundles/redoc.standalone.js",
+    "https://cdn.jsdelivr.net/npm/redoc@2.4.0/bundles/redoc.standalone.js.LICENSE.txt",
+    "https://cdn.jsdelivr.net/npm/redoc@2.4.0/bundles/redoc.standalone.js",
     "https://cdn.redoc.ly/redoc/logo-mini.svg",
 ]
 
