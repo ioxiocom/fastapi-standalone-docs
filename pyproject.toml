@@ -9,7 +9,7 @@ repository = "https://github.com/ioxiocom/fastapi-standalone-docs"
 packages = [{include = "fastapi_standalone_docs"}]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 fastapi = ">=0.109.1,<1"
 
 [tool.poetry.scripts]
