@@ -1,20 +1,12 @@
-import re
-from pathlib import Path
-
 from invoke import Exit, task
 
 
 @task
 def release(ctx):
-    toml = Path("pyproject.toml").read_text()
-    match = re.search(r'version = "(.*?)"', toml)
-    if match:
-        version = match.group(1)
-        print(f"Releasing {version}")
-        ctx.run(f"git tag {version}", echo=True)
-        ctx.run(f"git push origin {version}", echo=True)
-    else:
-        print("Failed to find version in the pyproject.toml")
+    version = ctx.run("uv version --short --color never", hide=True).stdout.strip()
+    print(f"Releasing {version}")
+    ctx.run(f"git tag {version}", echo=True)
+    ctx.run(f"git push origin {version}", echo=True)
 
 
 def run_test_cmd(ctx, cmd) -> int:
@@ -30,14 +22,15 @@ def test(ctx):
     if run_test_cmd(ctx, "pre-commit run --all-files"):
         failed_commands.append("Pre commit hooks")
 
-    if run_test_cmd(ctx, "mypy fastapi_standalone_docs"):
+    if run_test_cmd(ctx, "mypy"):
         failed_commands.append("Mypy")
 
     if run_test_cmd(ctx, "pytest"):
         failed_commands.append("Unit tests")
 
-    if run_test_cmd(ctx, "flake8"):
-        failed_commands.append("flake8")
+    # Checks the locked dependencies for known vulnerabilities
+    if run_test_cmd(ctx, "uv audit --preview-features audit-command"):
+        failed_commands.append("uv audit")
 
     if failed_commands:
         msg = "Errors: " + ", ".join(failed_commands)

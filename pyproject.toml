@@ -1,34 +1,69 @@
-[tool.poetry]
+[project]
 name = "fastapi-standalone-docs"
-version = "0.2.0"
+version = "0.3.0"
 description = "Host FastAPI Swagger UI and ReDoc without third party CDNs"
-authors = ["IOXIO Ltd"]
-license = "MIT"
 readme = "README.md"
-repository = "https://github.com/ioxiocom/fastapi-standalone-docs"
-packages = [{include = "fastapi_standalone_docs"}]
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "IOXIO Ltd" }]
+requires-python = ">=3.11"
+dependencies = ["fastapi>=0.133.0,<1"]
+keywords = ["fastapi", "swagger", "swagger-ui", "redoc", "openapi", "offline"]
+classifiers = [
+    "Framework :: FastAPI",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Topic :: Documentation",
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-fastapi = ">=0.109.1,<1"
+[project.urls]
+Homepage = "https://github.com/ioxiocom/fastapi-standalone-docs"
+Issues = "https://github.com/ioxiocom/fastapi-standalone-docs/issues"
 
-[tool.poetry.scripts]
-update-fastapi-standalone-docs = { callable = "fastapi_standalone_docs.scripts:update_docs", extras = ["scripts"] }
-
-[tool.poetry.extras]
-scripts = []
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.3.4"
-mypy = "^1.15.0"
-httpx = "^0.28.1"
-invoke = "^2.2.0"
-flake8 = "^7.1.2"
-
-[tool.skjold]
-report_only = false
-sources = ["pyup", "gemnasium"]
+[project.scripts]
+update-fastapi-standalone-docs = "fastapi_standalone_docs.scripts:update_docs"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.13,<0.14"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+source-include = ["tests/**"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "mypy>=2.4.0",
+    "httpx2>=2.13.1",
+    "invoke>=3.0.3",
+    "pre-commit>=4.6.2",
+    "ruff==0.17.0",  # keep in sync with the ruff-pre-commit rev
+]
+
+[tool.uv]
+required-version = ">=0.13"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-v"]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.mypy]
+files = ["src", "tests"]
+warn_return_any = true
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+# E/W: pycodestyle; F: Pyflakes; I: isort; UP: pyupgrade; B: flake8-bugbear;
+# SIM: flake8-simplify; RUF: Ruff-specific rules
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF"]

@@ -208,3 +208,172 @@ def test_openapi_disabled():
     for path in paths:
         response = client.get(path)
         assert response.status_code == 404
+
+
+def test_swagger_mounted_app():
+    app = FastAPI()
+    StandaloneDocs(app)
+    main_app = FastAPI()
+    main_app.mount("/myapp1", app)
+    client = TestClient(main_app)
+
+    response = client.get("/myapp1/docs")
+    assert response.status_code == 200
+
+    expected_strings = (
+        '<link type="text/css" rel="stylesheet" href="/myapp1/docs/swagger-ui.css">',
+        '<script src="/myapp1/docs/swagger-ui-bundle.js"></script>',
+        '<link rel="shortcut icon" href="/myapp1/docs/fastapi/favicon.png">',
+    )
+    for expected_string in expected_strings:
+        assert expected_string in response.text
+
+    # No external links/hrefs etc. expected
+    assert "https://" not in response.text
+    assert "http://" not in response.text
+
+    # Check we can load the files
+    expected_resources = (
+        "/myapp1/docs/swagger-ui.css",
+        "/myapp1/docs/swagger-ui-bundle.js",
+        "/myapp1/docs/fastapi/favicon.png",
+    )
+    for res in expected_resources:
+        response = client.get(res)
+        assert response.status_code == 200
+
+
+def test_redoc_mounted_app():
+    app = FastAPI()
+    StandaloneDocs(app)
+    main_app = FastAPI()
+    main_app.mount("/myapp1", app)
+    client = TestClient(main_app)
+
+    response = client.get("/myapp1/redoc")
+    assert response.status_code == 200
+
+    expected_strings = (
+        '<script src="/myapp1/redoc/redoc.standalone.js"> </script>',
+        '<link rel="shortcut icon" href="/myapp1/redoc/fastapi/favicon.png">',
+    )
+    for expected_string in expected_strings:
+        assert expected_string in response.text
+
+    # No external links/hrefs etc. expected
+    assert "https://" not in response.text
+    assert "http://" not in response.text
+
+    # Check we can load the files
+    expected_resources = (
+        "/myapp1/redoc/logo-mini.svg",
+        "/myapp1/redoc/redoc.standalone.js",
+        "/myapp1/redoc/fastapi/favicon.png",
+    )
+    for res in expected_resources:
+        response = client.get(res)
+        assert response.status_code == 200
+
+
+def test_root_path():
+    app = FastAPI(root_path="/api/v1")
+    StandaloneDocs(app)
+    client = TestClient(app)
+
+    response = client.get("/docs")
+    assert response.status_code == 200
+    expected_strings = (
+        '<link type="text/css" rel="stylesheet" href="/api/v1/docs/swagger-ui.css">',
+        '<script src="/api/v1/docs/swagger-ui-bundle.js"></script>',
+        '<link rel="shortcut icon" href="/api/v1/docs/fastapi/favicon.png">',
+    )
+    for expected_string in expected_strings:
+        assert expected_string in response.text
+
+    response = client.get("/redoc")
+    assert response.status_code == 200
+    expected_strings = (
+        '<script src="/api/v1/redoc/redoc.standalone.js"> </script>',
+        '<link rel="shortcut icon" href="/api/v1/redoc/fastapi/favicon.png">',
+    )
+    for expected_string in expected_strings:
+        assert expected_string in response.text
+
+
+def test_mounted_app_custom_favicon():
+    # A favicon URL given by the caller is used as-is; it may point anywhere, so the
+    # caller is the one who knows whether it needs a prefix.
+    app = FastAPI()
+    StandaloneDocs(
+        app,
+        swagger_favicon_url="/myapp1/favicon.png",
+        redoc_favicon_url="/myapp1/favicon.png",
+    )
+    main_app = FastAPI()
+    main_app.mount("/myapp1", app)
+    client = TestClient(main_app)
+
+    for docs_url in ("/myapp1/docs", "/myapp1/redoc"):
+        response = client.get(docs_url)
+        assert response.status_code == 200
+        assert '<link rel="shortcut icon" href="/myapp1/favicon.png">' in response.text
+
+
+def test_standalone_docs_on_both_apps():
+    # Both apps patch the same shared functions (see the disclaimer in the README), but
+    # with equal settings each one still serves its own docs, under its own path.
+    app = FastAPI()
+    StandaloneDocs(app)
+    main_app = FastAPI()
+    StandaloneDocs(main_app)
+    main_app.mount("/myapp1", app)
+    client = TestClient(main_app)
+
+    expected = {
+        "/docs": (
+            '<link type="text/css" rel="stylesheet" href="/docs/swagger-ui.css">',
+            '<script src="/docs/swagger-ui-bundle.js"></script>',
+            '<link rel="shortcut icon" href="/docs/fastapi/favicon.png">',
+        ),
+        "/myapp1/docs": (
+            '<link type="text/css" rel="stylesheet"'
+            ' href="/myapp1/docs/swagger-ui.css">',
+            '<script src="/myapp1/docs/swagger-ui-bundle.js"></script>',
+            '<link rel="shortcut icon" href="/myapp1/docs/fastapi/favicon.png">',
+        ),
+        "/redoc": (
+            '<script src="/redoc/redoc.standalone.js"> </script>',
+            '<link rel="shortcut icon" href="/redoc/fastapi/favicon.png">',
+        ),
+        "/myapp1/redoc": (
+            '<script src="/myapp1/redoc/redoc.standalone.js"> </script>',
+            '<link rel="shortcut icon" href="/myapp1/redoc/fastapi/favicon.png">',
+        ),
+    }
+
+    for docs_url, expected_strings in expected.items():
+        response = client.get(docs_url)
+        assert response.status_code == 200
+        for expected_string in expected_strings:
+            assert expected_string in response.text
+
+        # No external links/hrefs etc. expected
+        assert "https://" not in response.text
+        assert "http://" not in response.text
+
+    # Check we can load the files of both apps
+    expected_resources = (
+        "/docs/swagger-ui.css",
+        "/docs/swagger-ui-bundle.js",
+        "/docs/fastapi/favicon.png",
+        "/redoc/redoc.standalone.js",
+        "/redoc/fastapi/favicon.png",
+        "/myapp1/docs/swagger-ui.css",
+        "/myapp1/docs/swagger-ui-bundle.js",
+        "/myapp1/docs/fastapi/favicon.png",
+        "/myapp1/redoc/redoc.standalone.js",
+        "/myapp1/redoc/fastapi/favicon.png",
+    )
+    for res in expected_resources:
+        response = client.get(res)
+        assert response.status_code == 200

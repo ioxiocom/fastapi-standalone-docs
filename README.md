@@ -1,7 +1,7 @@
 # FastAPI Standalone Docs
 
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ioxiocom/fastapi-standalone-docs/publish.yaml)](https://github.com/ioxiocom/fastapi-standalone-docs/actions/workflows/publish.yaml)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![PyPI](https://img.shields.io/pypi/v/fastapi-standalone-docs)](https://pypi.org/project/fastapi-standalone-docs/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/fastapi-standalone-docs)](https://pypi.org/project/fastapi-standalone-docs/)
 [![License: MIT](https://img.shields.io/pypi/l/fastapi-standalone-docs)](https://opensource.org/license/mit/)
@@ -85,50 +85,53 @@ StandaloneDocs(
 ### Disclaimer
 
 **Note!** If you create multiple FastAPI apps in the same runtime (quite unlikely
-use-case), using StandaloneDocs on one of them will affect the other ones as well, as
-the library patches two of the shared functions (`get_swagger_ui_html` and
-`get_redoc_html`). Thus the library should not be used in a such setup unless all the
-apps will use StandaloneDocs with the same settings.
+use-case), for example by mounting one app inside another, using StandaloneDocs on one
+of them will affect the other ones as well, as the library patches two of the shared
+functions (`get_swagger_ui_html` and `get_redoc_html`). Thus, the library should not be
+used in such a setup unless all the apps will use StandaloneDocs with the same settings
+and the same `docs_url`, `redoc_url` and `openapi_url` on the FastAPI app itself. If any
+of those differ, only the app that called StandaloneDocs last will serve its docs
+correctly.
 
 ## Development
 
 PRs are welcome!
 
-This project is using [Poetry](https://python-poetry.org/) and
-[pre-commit](https://pre-commit.com/), so please ensure you've installed both. To set up
-the project with them run:
+This project is using [uv](https://docs.astral.sh/uv/), so please ensure you've
+[installed it](https://docs.astral.sh/uv/getting-started/installation/). To set up the
+project run:
 
 ```bash
-pre-commit install
-poetry install
+uv sync
+uv run pre-commit install
 ```
 
-Running tests locally:
+Running tests locally (pre-commit hooks, mypy, pytest and a dependency audit):
 
 ```bash
-poetry run invoke test
+uv run invoke test
 ```
 
 Updating the static files from the CDNs:
 
 ```bash
-poetry run update-fastapi-standalone-docs
+uv run update-fastapi-standalone-docs
 ```
 
 If you want to test using it locally in some other project, in that project run this
 (make sure to adjust the path to the local repo):
 
 ```bash
-poetry add ../fastapi-standalone-docs --editable
+uv add --editable ../fastapi-standalone-docs
 ```
 
 ## License
 
 The code of this library itself is released under the [MIT license](./LICENSE). Please
 however note that this library also contains parts of
-[ReDoc](./fastapi_standalone_docs/static/redoc/), which is licensed under the
-[MIT license](./fastapi_standalone_docs/static/redoc/redoc.standalone.js.LICENSE.txt),
-[Swagger UI](./fastapi_standalone_docs/static/swagger/), which is licensed under the
-[Apache 2.0 License](./fastapi_standalone_docs/static/swagger/LICENSE), as well as parts
-of [FastAPI](./fastapi_standalone_docs/static/fastapi) (the favicon), which is licensed
-under the [MIT license](./fastapi_standalone_docs/static/fastapi/LICENSE).
+[ReDoc](./src/fastapi_standalone_docs/static/redoc/), which is licensed under the
+[MIT license](./src/fastapi_standalone_docs/static/redoc/redoc.standalone.js.LICENSE.txt),
+[Swagger UI](./src/fastapi_standalone_docs/static/swagger/), which is licensed under the
+[Apache 2.0 License](./src/fastapi_standalone_docs/static/swagger/LICENSE), as well as
+parts of [FastAPI](./src/fastapi_standalone_docs/static/fastapi) (the favicon), which is
+licensed under the [MIT license](./src/fastapi_standalone_docs/static/fastapi/LICENSE).
