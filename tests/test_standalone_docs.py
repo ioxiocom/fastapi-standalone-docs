@@ -276,9 +276,9 @@ def test_redoc_mounted_app():
 
 
 def test_root_path():
-    app = FastAPI(root_path="/api/v1")
+    app = FastAPI()
     StandaloneDocs(app)
-    client = TestClient(app)
+    client = TestClient(app, root_path="/api/v1")
 
     response = client.get("/docs")
     assert response.status_code == 200
@@ -298,6 +298,18 @@ def test_root_path():
     )
     for expected_string in expected_strings:
         assert expected_string in response.text
+
+    # Check we can load the files, from the paths the browser would request
+    expected_resources = (
+        "/api/v1/docs/swagger-ui.css",
+        "/api/v1/docs/swagger-ui-bundle.js",
+        "/api/v1/docs/fastapi/favicon.png",
+        "/api/v1/redoc/redoc.standalone.js",
+        "/api/v1/redoc/fastapi/favicon.png",
+    )
+    for res in expected_resources:
+        response = client.get(res)
+        assert response.status_code == 200
 
 
 def test_mounted_app_custom_favicon():
