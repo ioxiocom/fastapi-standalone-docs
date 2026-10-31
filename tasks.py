@@ -28,8 +28,10 @@ def test(ctx):
     if run_test_cmd(ctx, "pytest"):
         failed_commands.append("Unit tests")
 
-    # Checks the locked dependencies for known vulnerabilities
-    if run_test_cmd(ctx, "uv audit --preview-features audit-command"):
+    # Checks the locked dependencies for known vulnerabilities. --frozen audits uv.lock
+    # as it is, without resolving the project first, which would make uv look for the
+    # Python in .python-version and download it in CI jobs testing other versions.
+    if run_test_cmd(ctx, "uv audit --frozen --preview-features audit-command"):
         failed_commands.append("uv audit")
 
     if failed_commands:

@@ -1,6 +1,6 @@
 [project]
 name = "fastapi-standalone-docs"
-version = "0.3.0"
+version = "0.3.1"
 description = "Host FastAPI Swagger UI and ReDoc without third party CDNs"
 readme = "README.md"
 license = "MIT"
@@ -31,7 +31,7 @@ Issues = "https://github.com/ioxiocom/fastapi-standalone-docs/issues"
 update-fastapi-standalone-docs = "fastapi_standalone_docs.scripts:update_docs"
 
 [build-system]
-requires = ["uv_build>=0.13,<0.14"]
+requires = ["uv_build>=0.13.5,<0.14"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
@@ -39,16 +39,16 @@ source-include = ["tests/**"]
 
 [dependency-groups]
 dev = [
-    "pytest>=9.1.1",
-    "mypy>=2.4.0",
-    "httpx2>=2.13.1",
+    "pytest>=9.2.0",
+    "mypy>=2.4.1",
+    "httpx2>=2.16.0",
     "invoke>=3.0.3",
-    "pre-commit>=4.6.2",
-    "ruff==0.17.0",  # keep in sync with the ruff-pre-commit rev
+    "pre-commit>=4.7.0",
+    "ruff==0.17.3",  # keep in sync with the ruff-pre-commit rev
 ]
 
 [tool.uv]
-required-version = ">=0.13"
+required-version = ">=0.13.6"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

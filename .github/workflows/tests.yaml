@@ -4,6 +4,10 @@ on:
   pull_request:
     types: [opened, synchronize, edited]
 
+env:
+  # uv's own Python builds (latest patch releases), never the runner's system Python
+  UV_PYTHON_PREFERENCE: only-managed
+
 jobs:
   run_tests:
     name: Run tests
@@ -18,7 +22,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up uv and Python ${{ matrix.python-version }} 🐍
-        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         with:
           python-version: ${{ matrix.python-version }}
           cache-suffix: test-${{ matrix.python-version }}

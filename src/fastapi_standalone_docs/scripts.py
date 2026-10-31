@@ -9,9 +9,9 @@ FASTAPI_FILES = [
 ]
 
 SWAGGER_FILES = [
-    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.33.1/LICENSE",
-    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.33.1/swagger-ui.css",
-    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.33.1/swagger-ui-bundle.js",
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.34.1/LICENSE",
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.34.1/swagger-ui.css",
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.34.1/swagger-ui-bundle.js",
 ]
 
 REDOC_FILES = [
